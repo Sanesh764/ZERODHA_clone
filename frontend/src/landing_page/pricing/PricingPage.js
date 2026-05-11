@@ -1,12 +1,19 @@
-import React from "react";
+import Hero from "./Hero";
+import Tabs from "./Tabs";
+import AccountOpening from "./AccountOpening";
+import DematAMC from "./DematAMC";
+import ChargesExplained from "./ChargesExplained";
 
-function PricingPage() {
-    return (
-        <div className="container p-5 mb-5 text-center">
-            <h1>Pricing Page</h1>
-            <p className="text-muted mt-3">Free equity delivery and direct mutual funds</p>
-        </div>
-    );
+function Pricing() {
+  return (
+    <>
+      <Hero />
+      <Tabs />
+      <AccountOpening />
+      <DematAMC />
+      <ChargesExplained />
+    </>
+  );
 }
 
-export default PricingPage;
+export default Pricing;

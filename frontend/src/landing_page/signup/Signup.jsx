@@ -23,7 +23,7 @@ function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/signup",
+        "https://main.d2nd08dk4frp54.amplifyapp.com/signup",//or we use simple your url localhost:8080
         formData
       );
 

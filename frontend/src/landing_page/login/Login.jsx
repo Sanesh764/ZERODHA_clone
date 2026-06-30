@@ -23,7 +23,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/login",
+        "https://main.d2nd08dk4frp54.amplifyapp.com//login",
         formData
       );
 
@@ -35,7 +35,7 @@ function Login() {
         
         // Redirect to dashboard (typically on port 5173 or 5174)
         setTimeout(() => {
-          window.location.href = "http://localhost:5173"; 
+          window.location.href = "https://main.d2nd08dk4frp54.amplifyapp.com"; 
         }, 1500);
       }
     } catch (err) {

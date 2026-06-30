@@ -54,7 +54,7 @@ passport.deserializeUser(user.deserializeUser());
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-    const { username, email, password } = req.body;
+    const {username,email,password }=req.body;
     try {
         const newUser = new user({
             username,
@@ -77,19 +77,34 @@ app.post("/signup", async (req, res) => {
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) {
-            return res.status(500).json({ success: false, message: err.message });
+            return res
+            .status(500)
+            .json({
+                success: false, 
+                message: err.message 
+            });
         }
         if (!user) {
-            return res.status(400).json({ success: false, message: info ? info.message : "Invalid username or password" });
+            return res
+            .status(400)
+            .json({ 
+                success: false, 
+                message: info ? info.message : "Invalid username or password"
+            });
         }
         req.logIn(user, (err) => {
             if (err) {
-                return res.status(500).json({ success: false, message: err.message });
+                return res
+                .status(500)
+                .json({ 
+                    success: false,
+                     message: err.message
+                });
             }
             return res.json({
-                success: true,
-                message: "user logged in successfully",
-                user: {
+                success:true,
+                message:"user logged in successfully",
+                user:{
                     _id: user._id,
                     username: user.username,
                     email: user.email

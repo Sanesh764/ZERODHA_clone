@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PositionsSchema=new Schema({
-
+    postion:{
+        type:String,
+    },
     name:{
         type:String,
+    },
+    qty:{
+        type:Number,
     },
     avg:{
         type:Number,

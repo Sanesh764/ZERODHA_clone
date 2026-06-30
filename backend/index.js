@@ -157,28 +157,48 @@ let URL=process.env.MONGO_URL;
 
 
 //don,t run this code otherwise duplicate data will uploade on database
-// app.get("/AddpostionHolding",async(req,res)=>{
+// app.get("/addpostion",async(req,res)=>{
 //     let tempPositions=[
 //     {
-//     product: "CNC",
-//     name: "EVEREADY",
-//     qty: 2,
-//     avg: 316.27,
-//     price: 312.35,
-//     net: "+0.58%",
-//     day: "-1.24%",
-//     isLoss: true,
-//   },
-//   {
-//     product: "CNC",
-//     name: "JUBLFOOD",
-//     qty: 1,
-//     avg: 3124.75,
-//     price: 3082.65,
-//     net: "+10.04%",
-//     day: "-1.35%",
-//     isLoss: true,
-//   },
+//   product: "CNC",
+//   name: "TCS",
+//   qty: 3,
+//   avg: 3895.50,
+//   price: 3942.80,
+//   net: "+1.21%",
+//   day: "+0.78%",
+//   isLoss: false,
+// },
+// {
+//   product: "CNC",
+//   name: "INFY",
+//   qty: 5,
+//   avg: 1542.30,
+//   price: 1528.60,
+//   net: "-0.89%",
+//   day: "-0.45%",
+//   isLoss: true,
+// },
+// {
+//   product: "CNC",
+//   name: "HDFCBANK",
+//   qty: 2,
+//   avg: 1684.20,
+//   price: 1712.75,
+//   net: "+1.69%",
+//   day: "+0.96%",
+//   isLoss: false,
+// },
+// {
+//   product: "CNC",
+//   name: "RELIANCE",
+//   qty: 1,
+//   avg: 2865.40,
+//   price: 2848.90,
+//   net: "-0.58%",
+//   day: "-0.31%",
+//   isLoss: true,
+// },
 //     ];
 //     tempPositions.forEach((item)=>{
 //         let newPosition=new PositionsModel({
@@ -188,12 +208,13 @@ let URL=process.env.MONGO_URL;
 //             avg:item.avg,
 //             price:item.price,
 //             net:item.net,
+//             day:item.day,
 //             isLoss:item.isLoss
 //         });
 //         newPosition.save();
-//         res.send("new holding uploaded successfully");
-//         console.log("data uploaded successfully");
 //     });
+//     res.send("new holding uploaded successfully");
+//     console.log("data uploaded successfully");
 // });
 
 app.listen(port,()=>{

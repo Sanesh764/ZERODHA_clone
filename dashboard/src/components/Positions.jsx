@@ -1,16 +1,37 @@
-import React from "react";
-import { positions } from "../data/data";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { positions as defaultPositions } from "../data/data";
 
 const Positions = () => {
+  const [allPositions, setAllPositions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/allpostions")
+      .then((res) => {
+        setAllPositions(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("Positions: Backend API offline, loading mock data.", err.message);
+        setAllPositions(defaultPositions);
+        setLoading(false);
+      });
+  }, []);
+
   // Calculations
-  const totalInvestment = positions.reduce((acc, stock) => acc + (stock.avg * stock.qty), 0);
-  const totalCurrentValue = positions.reduce((acc, stock) => acc + (stock.price * stock.qty), 0);
+  const totalInvestment = allPositions.reduce((acc, stock) => acc + (stock.avg * stock.qty), 0);
+  const totalCurrentValue = allPositions.reduce((acc, stock) => acc + (stock.price * stock.qty), 0);
   const totalPL = totalCurrentValue - totalInvestment;
   const plPercentage = totalInvestment > 0 ? (totalPL / totalInvestment) * 100 : 0;
 
+  if (loading) {
+    return <div className="loading-state">Loading positions...</div>;
+  }
+
   return (
     <div className="positions-section">
-      <h3 className="section-title">Positions ({positions.length})</h3>
+      <h3 className="section-title">Positions ({allPositions.length})</h3>
 
       <div className="table-wrapper">
         <table className="kite-table">
@@ -26,7 +47,7 @@ const Positions = () => {
             </tr>
           </thead>
           <tbody>
-            {positions.map((stock, index) => {
+            {allPositions.map((stock, index) => {
               const curValue = stock.price * stock.qty;
               const investment = stock.avg * stock.qty;
               const pnl = curValue - investment;

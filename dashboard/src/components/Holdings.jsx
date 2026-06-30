@@ -9,7 +9,7 @@ const Holdings = () => {
 
   useEffect(() => {
     // 1. Fetch from server, fallback to merging local + default mock data
-    axios.get("http://localhost:3002/allHoldings")
+    axios.get("http://localhost:8080/allHoldings")
       .then((res) => {
         setAllHoldings(res.data);
         setLoading(false);
@@ -17,27 +17,27 @@ const Holdings = () => {
       .catch((err) => {
         console.log("Holdings: Backend API offline, loading mock data.", err.message);
         
-        // Merge default mock holdings with custom bought holdings in this session
-        const customHoldingsRaw = localStorage.getItem("custom_holdings");
-        const customHoldings = customHoldingsRaw ? JSON.parse(customHoldingsRaw) : [];
+        // // Merge default mock holdings with custom bought holdings in this session
+        // const customHoldingsRaw = localStorage.getItem("custom_holdings");
+        // const customHoldings = customHoldingsRaw ? JSON.parse(customHoldingsRaw) : [];
         
-        // Combine them
-        const merged = [...defaultHoldings];
-        customHoldings.forEach((custom) => {
-          const match = merged.find((h) => h.name === custom.name);
-          if (match) {
-            // Update quantity and recalculate average
-            const prevTotal = match.avg * match.qty;
-            const newTotal = custom.avg * custom.qty;
-            match.qty += custom.qty;
-            match.avg = (prevTotal + newTotal) / match.qty;
-          } else {
-            merged.push(custom);
-          }
-        });
+        // // Combine them
+        // const merged = [...defaultHoldings];
+        // customHoldings.forEach((custom) => {
+        //   const match = merged.find((h) => h.name === custom.name);
+        //   if (match) {
+        //     // Update quantity and recalculate average
+        //     const prevTotal = match.avg * match.qty;
+        //     const newTotal = custom.avg * custom.qty;
+        //     match.qty += custom.qty;
+        //     match.avg = (prevTotal + newTotal) / match.qty;
+        //   } else {
+        //     merged.push(custom);
+        //   }
+        // });
         
-        setAllHoldings(merged);
-        setLoading(false);
+        // setAllHoldings(merged);
+        // setLoading(false);
       });
   }, []);
 

@@ -217,6 +217,15 @@ let URL=process.env.MONGO_URL;
 //     console.log("data uploaded successfully");
 // });
 
+app.get("/allHoldings",async(req ,res)=>{
+    let allHoldings=await HoldingsModel.find({});
+    res.json(allHoldings);
+});
+
+app.get("/allpostions",async(req ,res)=>{
+    let allpositions=await PositionsModel.find({});
+    res.json(allpositions);
+});
 app.listen(port,()=>{
     console.log(`app is listening on port ${port}`);
     

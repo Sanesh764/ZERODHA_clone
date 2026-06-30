@@ -1,15 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
-function SignUp() {
+
+function Login() {
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
     password: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const handelChange = async (e) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -23,14 +23,19 @@ function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/signup",
+        "http://localhost:8080/login",
         formData
       );
 
       if (response.data.success) {
-        setSuccessMsg("Account created successfully! Redirecting to login...");
+        setSuccessMsg("Logged in successfully! Redirecting to dashboard...");
+        
+        // Save user to localStorage
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        
+        // Redirect to dashboard (typically on port 5173 or 5174)
         setTimeout(() => {
-          window.location.href = "/login";
+          window.location.href = "http://localhost:5173"; 
         }, 1500);
       }
     } catch (err) {
@@ -38,7 +43,7 @@ function SignUp() {
       if (err.response && err.response.data && err.response.data.message) {
         setErrorMsg(err.response.data.message);
       } else {
-        setErrorMsg("Network error. Make sure your backend server is running.");
+        setErrorMsg("Network error or invalid credentials. Make sure backend is running.");
       }
     }
   };
@@ -50,9 +55,9 @@ function SignUp() {
         style={{ width: "430px" }}
       >
         <div className="text-center mb-4">
-          <h2 className="fw-bold text-primary">Create Account</h2>
+          <h2 className="fw-bold text-primary">Login to Account</h2>
           <p className="text-muted">
-            Start investing with Zerodha
+            Access your Kite trading dashboard
           </p>
         </div>
 
@@ -69,7 +74,6 @@ function SignUp() {
         )}
 
         <form onSubmit={handleSubmit}>
-
           <div className="mb-3">
             <label className="form-label fw-semibold">
               Username
@@ -80,22 +84,7 @@ function SignUp() {
               name="username"
               placeholder="Enter username"
               value={formData.username}
-              onChange={handelChange}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label fw-semibold">
-              Email
-            </label>
-            <input
-              type="email"
-              className="form-control form-control-lg"
-              name="email"
-              placeholder="Enter email"
-              value={formData.email}
-              onChange={handelChange}
+              onChange={handleChange}
               required
             />
           </div>
@@ -110,7 +99,7 @@ function SignUp() {
               name="password"
               placeholder="Enter password"
               value={formData.password}
-              onChange={handelChange}
+              onChange={handleChange}
               required
             />
           </div>
@@ -119,19 +108,19 @@ function SignUp() {
             type="submit"
             className="btn btn-primary btn-lg w-100"
           >
-            Sign Up
+            Log In
           </button>
 
           <p className="text-center text-muted mt-3 mb-0">
-            Already have an account?
-            <a href="/login" className="text-decoration-none ms-1">
-              Login
+            Don't have an account?
+            <a href="/signup" className="text-decoration-none ms-1">
+              Sign Up
             </a>
           </p>
-
         </form>
       </div>
     </div>
-    )
+  );
 }
-export default SignUp;
+
+export default Login;

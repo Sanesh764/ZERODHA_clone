@@ -6,10 +6,15 @@ var cors = require('cors');
 
 const {HoldingsModel}=require("./models/HoldingsModel.js");
 const {PositionsModel}=require("./models/PositionsModel.js");
+
 const mongoose=require("mongoose");
-app.use(cors());
+const cookie=require("cookie");
+const cookieParser=require("cookie-parser");
+const session = require("express-session");
+
 
 const dns=require("dns");
+// const { session } = require('passport');
 dns.setServers([
     '1.1.1.1',
     '8.8.8.8'
@@ -27,7 +32,72 @@ let URL=process.env.MONGO_URL;
         console.log(error);
     }
 })();
- 
+
+const passport=require("passport");
+const LocalStategy=require("passport-local");
+const {user}=require("./models/userModel.js");
+
+app.use(cors());
+
+
+const sessionOption={
+    secret:process.env.secret,
+    resave:false,
+    saveUninitialized:true,
+};
+app.use(session(sessionOption));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStategy(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+app.use(express.json());
+
+app.post("/signup", async (req, res) => {
+    const { username, email, password } = req.body;
+    try {
+        const newUser = new user({
+            username,
+            email,
+        });
+        const registeredUser = await user.register(newUser, password);
+        res.json({
+            success: true,
+            message: "User registered successfully",
+            user: registeredUser,
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message,
+        });
+    }
+});
+
+app.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+        if (!user) {
+            return res.status(400).json({ success: false, message: info ? info.message : "Invalid username or password" });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: err.message });
+            }
+            return res.json({
+                success: true,
+                message: "user logged in successfully",
+                user: {
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email
+                },
+            });
+        });
+    })(req, res, next);
+});
 //send to data in monodb dummary data isko dubara use mat karna otherwise duplicate data save ho jayega database me
 // app.get("/addHoldings",async(req,res)=>{
 //     let tempHoldings=[
@@ -226,6 +296,9 @@ app.get("/allpostions",async(req ,res)=>{
     let allpositions=await PositionsModel.find({});
     res.json(allpositions);
 });
+
+
+
 app.listen(port,()=>{
     console.log(`app is listening on port ${port}`);
     
